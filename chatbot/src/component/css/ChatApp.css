@@ -1,0 +1,8 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #1a1a1a;
+  color: #e6e6e6;
+  font-family: ui-sans-serif, -apple-system, system-ui, "Segoe UI", Arial, sans-serif;
+}

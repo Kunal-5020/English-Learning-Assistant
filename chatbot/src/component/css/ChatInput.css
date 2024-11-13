@@ -1,0 +1,122 @@
+.buttons-container {
+  display: flex; /* Align buttons horizontally */
+  justify-content: row; /* Align items to the left */
+  align-items: center; /* Center vertically */
+  gap: 5px; /* Space between buttons */
+}
+
+
+/* Container for the entire chat input section */
+.chat-input {
+  display: flex;
+  flex-direction:column; /* Stack the input and response vertically */
+  align-items: center;
+  transition: all 1s ease;
+  padding: 10px;
+  background-color: #2f2f2f;
+  border-radius: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: auto; /* Allow for dynamic height based on content */
+  position: fixed;
+  bottom: 40px;
+  max-height: 400px; /* Max height for chat input container */
+  overflow-y: auto; /* Allow scrolling if content exceeds container height */
+  padding-right: 60px; /* Space for buttons on the right */
+}
+
+/* Container for the expected user response (UserResponse) */
+.user-response-display {
+  width: 100%;
+  padding: 10px;
+  background-color: #444;
+  color: #e6e6e6;
+  font-size: 18px;
+  border-radius: 15px;
+  margin-bottom: 15px; /* Space between user response and input field */
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Input field for the chat */
+.input-field {
+  flex: 1;
+  padding: 15px;
+  padding-left: 20px;
+  border: none;
+  background-color: #2f2f2f;
+  color: #e6e6e6;
+  font-size: 24px;
+  border-radius: 20px;
+  width: 100%;
+  margin-bottom: 10px; /* Space between input field and buttons */
+  resize: none; /* Prevent resizing */
+  min-height: 55px; /* Min height for input */
+  max-height: 100px; /* Max height for input */
+  transition: all 0.3s ease;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+/* Position the mic and send buttons outside of the chat input */
+.buttons-container {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%); /* Center buttons vertically */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 80px; /* Adjust height for buttons */
+}
+
+/* Button styling */
+.mic-button,
+.send-button {
+  background-color: #444;
+  color: #fff;
+  border: none;
+  border-radius: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.send-button:hover,
+.mic-button:hover {
+  background-color: #212121; /* Slightly lighter color on hover */
+}
+
+.send-button svg,
+.mic-button svg {
+  width: 25px; /* Set the size of the SVG icon */
+  height: 25px; /* Set the size of the SVG icon */
+  fill: white; /* Change icon color */
+}
+
+.start-button {
+  background-color: #4CAF50; /* Green background */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+.start-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+.start-button:active {
+  background-color: #3e8e41; /* Even darker green when pressed */
+}
+
+.start-button:focus {
+  outline: none; /* Remove the default focus outline */
+}

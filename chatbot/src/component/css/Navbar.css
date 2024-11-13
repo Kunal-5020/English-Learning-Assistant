@@ -1,0 +1,94 @@
+.navbar {
+    /* Font & Text */
+    font-family: ui-sans-serif, -apple-system, system-ui, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    color: rgb(255, 255, 255);
+
+    /* Color & Background */
+    background-color: rgb(33, 33, 33);
+
+    /* Box */
+    height: 80px;
+    width: 100vw;
+    padding: 12px;
+    box-sizing: border-box;
+    padding-left: 40px;
+    padding-right: 40px;
+
+    /* Positioning */
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+
+    /* Miscellaneous */
+    cursor: pointer;
+}
+
+/* Hides navbar on smaller screens (below the 'md' breakpoint) */
+@media (max-width: 768px) {
+    .navbar {
+        display: none;
+    }
+}
+
+
+.arrow-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .arrow-button {
+    background-color: #212121; /* Background color for the buttons */
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    margin: 0; /* Remove any default margin between buttons */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .arrow-button:hover {
+    background-color: #333; /* Slightly lighter on hover */
+  }
+  
+  .arrow-button svg {
+    margin: 0; /* Remove any space around the SVG icons */
+  }
+  
+  /* Add some spacing between the arrow buttons if needed */
+  .arrow-button + .arrow-button {
+    margin-left: 5px;
+  }
+  
+
+.new-chat-button {
+    /* Styling the icon button */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(33, 33, 33);
+    color: rgb(180, 180, 180);
+    height: 40px;
+    width: 40px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.new-chat-button:enabled:hover {
+    background-color: rgb(45, 45, 45);
+}
+
+.new-chat-button:focus-visible {
+    outline: none;
+    background-color: rgb(45, 45, 45);
+}
