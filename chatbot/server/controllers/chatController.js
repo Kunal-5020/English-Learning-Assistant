@@ -8,6 +8,7 @@ dotenv.config(); // Load environment variables from the .env file
 
 // Initialize Google Generative AI with the API key
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+console.log(process.env.API_KEY)
 const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
 // Function to generate AI response
