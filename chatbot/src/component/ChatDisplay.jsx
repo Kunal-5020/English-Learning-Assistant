@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useImperativeHandle } from "react";
 import "./css/ChatDisplay.css";
-import TextToSpeech from "../voice/TextToSpeech"; // Import the updated TextToSpeech function
+import { textToSpeech } from "../voice/TextToSpeech"; // Import the updated TextToSpeech function
 import botIcon from '../asset/ai.png';
 import speakerIcon from '../asset/speaker.png';
 
@@ -44,7 +44,7 @@ const ChatDisplay = React.forwardRef(({ messages, currentResponseIndex }, ref) =
 
   // Function to handle the speaker icon click
   const handleSpeakClick = (messageText) => {
-    TextToSpeech(messageText); // Pass the message text to TextToSpeech function
+    textToSpeech(messageText); // Pass the message text to TextToSpeech function
   };
 
   return (

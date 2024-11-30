@@ -1,38 +1,24 @@
-const TextToSpeech = (text) => {
-  const speech = new SpeechSynthesisUtterance(text);
-  speech.lang = "en-US";  // Set the language to English.
+import { useSpeechSynthesis } from 'react-speech-kit';
 
-  // Define a function to select the female voice
-  const setVoice = () => {
-    const voices = speechSynthesis.getVoices();  // Get all available voices
+// TextToSpeech.js
+export const textToSpeech = (text) => {
+  const speechSynthesis = window.speechSynthesis;
 
-    // Try to find a female voice
-    const femaleVoice = voices.find((voice) => voice.name.toLowerCase().includes("female"));
+  // Create a new speech synthesis utterance
+  const utterance = new SpeechSynthesisUtterance(text);
 
-    // If a female voice is found, use it, otherwise default to the first voice
-    speech.voice = femaleVoice || voices[0]; 
+  // Set properties for the speech
+  utterance.pitch = 1; // Default pitch
+  utterance.rate = 1;  // Default rate
 
-    speech.volume = 1;  // Max volume
-    speech.rate = 1;    // Normal speed
-    speech.pitch = 1;   // Normal pitch
-
-    speechSynthesis.speak(speech);  // Speak the text
-  };
-
-  // Check if voices are already loaded
+  // Set the voice to a female voice (if available)
   const voices = speechSynthesis.getVoices();
-  if (voices.length > 0) {
-    // If voices are already loaded, set the voice immediately
-    setVoice();
-  } else {
-    // If voices are not loaded yet, use the voiceschanged event to set the voice
-    speechSynthesis.onvoiceschanged = () => {
-      setVoice();
-    };
-  }
-};
+  const femaleVoice = voices.find(voice => voice.name.includes("Female")) || voices[0]; // Default to first voice if no female voice
+  utterance.voice = femaleVoice;
 
-export default TextToSpeech;
+  // Speak the text
+  speechSynthesis.speak(utterance);
+};
 
 
 
