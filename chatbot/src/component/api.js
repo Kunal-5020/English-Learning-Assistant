@@ -1,5 +1,5 @@
 // src/components/api.js
-const API_URL = 'http://localhost:5000/api/chat/generate'; 
+const API_URL = 'https://english-assistant-server.onrender.com/api/chat/generate'; 
 
 const api = {
   sendMessage: async (message) => {

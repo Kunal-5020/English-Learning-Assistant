@@ -34,7 +34,8 @@ const ChatInput = ({ onSendMessage }) => {
     onSendMessage(userMessage);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/chat/generate", {
+      // const response = await axios.post("http://localhost:5000/api/chat/generate", {
+        const response = await axios.post("https://english-assistant-server.onrender.com/api/chat/generate", {
         messagePayload: {
           history: [userMessage],
           current_message: { sender: "user", text: startMessage },
@@ -69,7 +70,7 @@ const ChatInput = ({ onSendMessage }) => {
         current_message: { sender: "user", text: input },
       };
 
-      const response = await axios.post("http://localhost:5000/api/chat/generate", {
+      const response = await axios.post("https://english-assistant-server.onrender.com/api/chat/generate", {
         messagePayload,
       });
 
