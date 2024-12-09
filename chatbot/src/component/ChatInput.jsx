@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, } from "react";
 import { FaMicrophone } from "react-icons/fa";
 import axios from "axios";
-import "./css/ChatInput.css";
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
+import "./css/ChatInput.css";
 
-const ChatInput = ({ onSendMessage }) => {
-  const [input, setInput] = useState("");
+const ChatInput = ({ onSendMessage, handleExpectedResponse }) => {
+  // const [input, setInput] = useState("");
   const { transcript, browserSupportsSpeechRecognition, resetTranscript } = useSpeechRecognition();
   const [history, setHistory] = useState([]);
-  const [UserResponse, loadResponse] = useState("");
   const [conversationStarted, setConversationStarted] = useState(false);
 
   // Start listening for speech
@@ -17,14 +16,39 @@ const ChatInput = ({ onSendMessage }) => {
     SpeechRecognition.startListening({ continuous: true, language: "en" });
   };
 
-  // Stop listening for speech
-  const stopListening = () => {
-    SpeechRecognition.stopListening();
-  };
+  // Stop listening for speech and send the message
+  const stopListeningAndSend = async () => {
+    SpeechRecognition.stopListening();  // Stop the microphone listening
+    if (transcript.trim()) {
+      const userMessage = { text: transcript, sender: "user" };
+      setHistory((prevHistory) => [...prevHistory, userMessage]);
+      onSendMessage(userMessage);  // Send the message to parent component
 
-  useEffect(() => {
-    setInput(transcript);
-  }, [transcript]);
+
+      // setInput(""); 
+
+      try {
+        const messagePayload = {
+          history: history.concat(userMessage),
+          current_message: { sender: "user", text: transcript },
+        };
+
+        const response = await axios.post("https://english-assistant-server.onrender.com/api/chat/generate", {
+          messagePayload,
+        });
+
+        const Response = response.data.response;
+        const botResponse = Response.BotResponse;
+        const userResponse = Response.UserResponse;
+
+        setHistory((prevHistory) => [...prevHistory, { text: botResponse, sender: "bot" }]);
+        onSendMessage({ text: botResponse, sender: "bot" });
+        handleExpectedResponse(userResponse);
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
+    }
+  };
 
   // Handle starting the conversation
   const handleStartConversation = async () => {
@@ -34,8 +58,7 @@ const ChatInput = ({ onSendMessage }) => {
     onSendMessage(userMessage);
 
     try {
-      // const response = await axios.post("http://localhost:5000/api/chat/generate", {
-        const response = await axios.post("https://english-assistant-server.onrender.com/api/chat/generate", {
+      const response = await axios.post("https://english-assistant-server.onrender.com/api/chat/generate", {
         messagePayload: {
           history: [userMessage],
           current_message: { sender: "user", text: startMessage },
@@ -44,53 +67,19 @@ const ChatInput = ({ onSendMessage }) => {
 
       const Response = response.data.response;
       const botResponse = Response.BotResponse;
-      const userResponse = Response.UserResponse;
+      // const userResponse = Response.UserResponse;
 
       setHistory((prevHistory) => [...prevHistory, { text: botResponse, sender: "bot" }]);
       onSendMessage({ text: botResponse, sender: "bot" });
-      loadResponse(userResponse);
       setConversationStarted(true);
     } catch (error) {
       console.error("Error starting conversation:", error);
     }
   };
 
-  // Handle sending user input
-  const handleSend = async () => {
-    if (!input.trim()) return;
-
-    const userMessage = { text: input, sender: "user" };
-    setHistory((prevHistory) => [...prevHistory, userMessage]);
-    onSendMessage(userMessage);
-    setInput("");
-
-    try {
-      const messagePayload = {
-        history: history.concat(userMessage),
-        current_message: { sender: "user", text: input },
-      };
-
-      const response = await axios.post("https://english-assistant-server.onrender.com/api/chat/generate", {
-        messagePayload,
-      });
-
-      const Response = response.data.response;
-      const botResponse = Response.BotResponse;
-      const userResponse = Response.UserResponse;
-
-      setHistory((prevHistory) => [...prevHistory, { text: botResponse, sender: "bot" }]);
-      onSendMessage({ text: botResponse, sender: "bot" });
-      loadResponse(userResponse);
-    } catch (error) {
-      console.error("Error sending message:", error);
-    }
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleSend();
-    }
-  };
+  // useEffect(() => {
+  //   setInput(transcript);
+  // }, [transcript]);
 
   if (!browserSupportsSpeechRecognition) {
     return <p>Your browser does not support speech recognition.</p>;
@@ -98,11 +87,10 @@ const ChatInput = ({ onSendMessage }) => {
 
   return (
     <div className="chat-input">
-      {conversationStarted && UserResponse && (
-        <div className="user-response-display">
-          <strong>Expected Response:</strong> {UserResponse}
-        </div>
-      )}
+      {/* Display recorded words (transcript) in the box */}
+      <div className="user-response-display">
+        <strong>{transcript}</strong>   {/* Show what's recorded */}
+      </div>
 
       <div className="input-container">
         {!conversationStarted ? (
@@ -111,31 +99,12 @@ const ChatInput = ({ onSendMessage }) => {
           </button>
         ) : (
           <>
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Type your response here..."
-              className="input-field"
-            />
             <button
               className="mic-button"
-              onMouseDown={startListening}
-              onMouseUp={stopListening}
+              onMouseDown={startListening}  // Start listening when the mic button is pressed
+              onMouseUp={stopListeningAndSend}  // Stop listening and send the message when the mic button is released
             >
               <FaMicrophone />
-            </button>
-            <button className="send-button" onClick={handleSend}>
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M12 7V17M12 7L16 11M12 7L8 11M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
-                  stroke="#2f2f2f"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
             </button>
           </>
         )}

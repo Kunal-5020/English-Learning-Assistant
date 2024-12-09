@@ -17,6 +17,11 @@ const ChatDisplay = React.forwardRef(({ messages, currentResponseIndex }, ref) =
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+
+    // Automatically speak the most recent message if it is from the bot
+    if (messages.length > 0 && messages[messages.length - 1].sender === "bot") {
+      textToSpeech(messages[messages.length - 1].text); // Automatically speak the latest message
+    }
   }, [messages, currentResponseIndex]);
 
   // Smooth scroll to the target message index
@@ -42,7 +47,7 @@ const ChatDisplay = React.forwardRef(({ messages, currentResponseIndex }, ref) =
     scrollToMessage,
   }));
 
-  // Function to handle the speaker icon click
+  // Function to handle the speaker icon click (for manual speaking)
   const handleSpeakClick = (messageText) => {
     textToSpeech(messageText); // Pass the message text to TextToSpeech function
   };

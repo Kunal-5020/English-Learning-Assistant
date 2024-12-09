@@ -1,5 +1,6 @@
 import React, { useState, useRef} from "react";
-import  ChatDisplay from "./ChatDisplay";
+// import  ChatDisplay from "./ChatDisplay";
+import Character from "./character";
 import ChatInput from "./ChatInput";
 import Navbar from "./Navbar.jsx";
 import "./css/ChatApp.css";
@@ -8,6 +9,7 @@ const App = () => {
   const [messages, setMessages] = useState([]);
   const [currentResponseIndex, setCurrentResponseIndex] = useState(-1);
   const chatRef = useRef(null);
+  const [expectedResponse, setExpectedResponse] = useState("");
 
 
   const handleScrollToMessage = (index) => {
@@ -57,6 +59,10 @@ const handleNextResponse = () => {
   }
 };
 
+const handleExpectedResponse = (userSpeech) => {
+    setExpectedResponse(userSpeech);
+};
+
   return (
     <div className="app-container">
       <Navbar
@@ -64,8 +70,14 @@ const handleNextResponse = () => {
         onPreviousResponse={handlePreviousResponse}
         onNextResponse={handleNextResponse}
       />
-      <ChatDisplay messages={messages} currentResponseIndex={currentResponseIndex} />
-      <ChatInput onSendMessage={handleSendMessage}/>
+      <Character messages={messages}/>
+      {/* <ChatDisplay messages={messages} currentResponseIndex={currentResponseIndex} /> */}
+      <ChatInput onSendMessage={(message) => handleSendMessage(message)} handleExpectedResponse={handleExpectedResponse}/>
+      {expectedResponse !== null && expectedResponse !== '' && (
+        <div className="expected-response">
+          <strong>Expected Response:</strong> {expectedResponse}
+        </div>
+      )}
     </div>
   );
 };
